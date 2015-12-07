@@ -1,0 +1,18 @@
+export WALLE_ROOT:=`pwd`
+
+all:
+	@cd hardware/rk_ffmpeg_linux && ./linux_generate.sh
+	@tools/mk_kernel.sh $(WALLE_ROOT)
+	@tools/copy_files.sh $(WALLE_ROOT)
+
+system:
+	@tools/mk_system.sh $(WALLE_ROOT)
+
+clean:
+	@echo "cleaning..."
+	@rm -rf output
+
+distclean:
+	@echo "unsupport"
+
+.PHONY: all system clean distclean
