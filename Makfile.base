@@ -1,9 +1,14 @@
 export WALLE_ROOT:=`pwd`
 
-.PHONY: all no_system rk_ffmpeg_linux system kernel clean distclean
+.PHONY: all no_system rk_ffmpeg_linux system kernel clean distclean demo
 
-no_system: kernel rk_ffmpeg_linux
+no_system: kernel demo
 	@tools/copy_files.sh $(WALLE_ROOT)
+
+demo: rk_ffmpeg_linux
+	@make -C demo/ffmpeg-example
+	@mkdir -p output/rootfs/root/
+	@cp demo/ffmpeg-example/ffmpegexample output/rootfs/root/
 
 rk_ffmpeg_linux:
 	@cd hardware/rk_ffmpeg_linux && ./linux_generate.sh
