@@ -5,7 +5,7 @@ if [ "$1"x != ""x  ]; then
          WALLE_ROOT=$1
 fi
 
-if [ ! -d $WALLE_ROOT/system ] && [ ! -d $WALLE_ROOT/kernel ]
+if [ ! -d $WALLE_ROOT/firmware ] && [ ! -d $WALLE_ROOT/kernel ]
 then
 	echo "Invalid walle root: $WALLE_ROOT"
 	exit
@@ -21,7 +21,7 @@ mkdir -p $OUT/img_mount
 mkdir -p $OUT/image
 
 if [ ! -f $SYSTEM_IMG ]; then
-	cp $WALLE_ROOT/system/lubuntu/lubuntu-14.04.img $SYSTEM_IMG
+	cp $WALLE_ROOT/firmware/lubuntu/lubuntu-14.04.img $SYSTEM_IMG
 fi
 
 # block size
