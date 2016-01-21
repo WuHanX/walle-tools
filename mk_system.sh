@@ -1,9 +1,12 @@
 #!/bin/bash
 
-WALLE_ROOT=".."
-if [ "$1"x != ""x  ]; then
-         WALLE_ROOT=$1
+echo "WALLE_ROOT=$WALLE_ROOT"
+
+if [ "$WALLE_ROOT"x == ""x  ]; then
+         WALLE_ROOT="`pwd`/.."
 fi
+
+echo "WALLE_ROOT=$WALLE_ROOT"
 
 if [ ! -d $WALLE_ROOT/firmware ] && [ ! -d $WALLE_ROOT/kernel ]
 then
@@ -11,18 +14,29 @@ then
 	exit
 fi
 
+if [ "$1"x == ""x ]
+then
+	echo "Please specify a image name"
+	exit
+fi
+
 echo "WALLE_ROOT=$WALLE_ROOT"
 OUT=$WALLE_ROOT/output
-SYSTEM_IMG=$OUT/image/system.img
+SYSTEM_IMG=$OUT/image/$1
 
 echo "Building system"
 
+if [ ! -f $SYSTEM_IMG ]; then
+	case $1 in
+	ubuntu-base.img) $WALLE_ROOT/tools/mk-ubuntu-base.sh $WALLE_ROOT;;
+	lubuntu.img) echo "make lubuntu image";;
+	qt.img) echo "make QT image";;
+	*) echo "Unknown image: $1";;
+	esac
+fi
+
 mkdir -p $OUT/img_mount
 mkdir -p $OUT/image
-
-if [ ! -f $SYSTEM_IMG ]; then
-	cp $WALLE_ROOT/firmware/lubuntu/lubuntu-14.04.img $SYSTEM_IMG
-fi
 
 # block size
 block_size=`tune2fs -l $SYSTEM_IMG | grep "Block size:" | awk '{print $3;}'`

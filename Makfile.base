@@ -1,6 +1,9 @@
-export WALLE_ROOT:=`pwd`
+#export WALLE_ROOT:=`pwd`
+export WALLE_ROOT:=$(shell pwd)
 
-.PHONY: all demo no_system hardware system kernel clean distclean
+$(warning WALLE_ROOT is: $(WALLE_ROOT))
+
+.PHONY: all base demo no_system hardware kernel clean distclean
 
 no_system: kernel demo
 	@tools/copy_files.sh $(WALLE_ROOT)
@@ -8,21 +11,23 @@ no_system: kernel demo
 demo: hardware
 	@make -C demo/ffmpeg-example
 	@mkdir -p output/rootfs/root/
-	@cp demo/ffmpeg-example/ffmpegexample output/rootfs/root/
+	@cp -rf demo/ffmpeg-example/ffmpegexample output/rootfs/root/
+	@cp -rf demo/glmark2 output/rootfs/
 
 hardware:
 	# make ffmpeg
 	@cd hardware/rk_ffmpeg_linux && ./linux_generate.sh
 	# make wifi
 	@make -C hardware/wifi
+	@cp -rf hardware/gpu/* output/rootfs/
 
 kernel:
 	@tools/mk_kernel.sh $(WALLE_ROOT)
 
-system:
-	@tools/mk_system.sh $(WALLE_ROOT)
+base:
+	@tools/mk_system.sh ubuntu-base.img
 
-all: no_system system
+all: no_system base
 
 clean:
 	@echo "cleaning..."

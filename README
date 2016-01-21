@@ -8,11 +8,11 @@ make system	- just building system.img, it is need usod permission.
 === Downloading Firmware on linux system ===
 In the top dir of this project, use below commands for downloading:
 
-sudo tools/DFU/Linux/upgrade_tool ul output/image/RK3288UbootLoader_V2.19.07.bin && \
+sudo tools/DFU/linux/upgrade_tool ul output/image/RK3288UbootLoader_V2.19.07.bin && \
 sleep 3 && \
-sudo tools/DFU/Linux/upgrade_tool di -p output/image/parameter && \
-sudo tools/DFU/Linux/upgrade_tool di -k output/image/kernel.img && \
-sudo tools/DFU/Linux/upgrade_tool di resource output/image/resource.img && \
-sudo tools/DFU/Linux/upgrade_tool di -b output/image/boot.img && \
-sudo tools/DFU/Linux/upgrade_tool di -s output/image/system.img
+sudo tools/DFU/linux/upgrade_tool di -p output/image/parameter && \
+sudo tools/DFU/linux/upgrade_tool di -k output/image/kernel.img && \
+sudo tools/DFU/linux/upgrade_tool di resource output/image/resource.img && \
+sudo tools/DFU/linux/upgrade_tool di -b output/image/boot.img && \
+sudo tools/DFU/linux/upgrade_tool di -s output/image/system.img
 
