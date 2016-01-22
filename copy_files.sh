@@ -11,9 +11,9 @@ IMAGE=$WALLE_ROOT/output/image
 echo "copying.."
 
 mkdir -p $IMAGE
-cp -rf $WALLE_ROOT/firmware/lubuntu/RK3288UbootLoader_*.bin $IMAGE
-cp -rf $WALLE_ROOT/firmware/lubuntu/parameter $IMAGE
-cp -rf $WALLE_ROOT/firmware/lubuntu/boot.img $IMAGE
+cp -rf $WALLE_ROOT/tools/common/RK3288UbootLoader_*.bin $IMAGE
+cp -rf $WALLE_ROOT/tools/common/parameter $IMAGE
+cp -rf $WALLE_ROOT/tools/common/boot.img $IMAGE
 
 cp -rf $WALLE_ROOT/kernel/kernel.img $IMAGE
 cp -rf $WALLE_ROOT/kernel/resource.img $IMAGE
