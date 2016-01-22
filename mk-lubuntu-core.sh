@@ -12,25 +12,20 @@ then
 	exit
 fi
 
-if [ "$1"x == ""x ]
-then
-	echo "Please specify a image name"
-	exit
-fi
-
 OUT=$WALLE_ROOT/output
-SYSTEM_IMG=$OUT/image/$1
+SYSTEM_IMG=$OUT/image/lubuntu-core.img
+UBUNTU_BASE_IMG=$OUT/image/ubuntu-base.img
+MOUNT_DIR=$OUT/img_mount
+UBUNTU_BASE_DIR=$WALLE_ROOT/firmware/lubuntu-core
 
-echo "Building system"
+echo "Building lubuntu-core"
 
-if [ ! -f $SYSTEM_IMG ]; then
-	case $1 in
-	ubuntu-base.img) $WALLE_ROOT/tools/mk-ubuntu-base.sh;;
-	lubuntu-core.img) $WALLE_ROOT/tools/mk-lubuntu-core.sh;;
-	qt.img) echo "make QT image";;
-	*) echo "Unknown image: $1";;
-	esac
+if [ ! -f $UBUNTU_BASE_IMG ]; then
+	echo "ubuntu-base image isn't exist, build it first."
+	$WALLE_ROOT/tools/mk-ubuntu-base.sh
 fi
+rm -rf $SYSTEM_IMG
+cp $UBUNTU_BASE_IMG $SYSTEM_IMG
 
 mkdir -p $OUT/img_mount
 mkdir -p $OUT/image
@@ -40,7 +35,7 @@ block_size=`tune2fs -l $SYSTEM_IMG | grep "Block size:" | awk '{print $3;}'`
 echo "Block size: $block_size"
 
 #let delta=128*1024*1024/$block_size
-delta=$((256*1024*1024/$block_size))
+delta=$((1024*1024*1024/$block_size))
 echo "delta is $delta"
 
 # minimal system block
@@ -54,11 +49,12 @@ resize2fs $SYSTEM_IMG $block_num
 
 sudo mount -o loop $SYSTEM_IMG $OUT/img_mount
 
-if [ -d $OUT/rootfs ]
-then
-	sudo cp -ap $OUT/rootfs/* $OUT/img_mount/
-	sync
-fi
+sudo cp $UBUNTU_BASE_DIR/deb/*.deb $MOUNT_DIR/var/cache/apt/archives/
+
+sudo cp $UBUNTU_BASE_DIR/lubuntu-core-helper.sh $MOUNT_DIR/tmp/
+sudo chmod 0755 $MOUNT_DIR/tmp/lubuntu-core-helper.sh
+sudo chroot $MOUNT_DIR /bin/bash -c "/tmp/lubuntu-core-helper.sh"
+sudo rm -rf $MOUNT_DIR/tmp/lubuntu-core-helper.sh
 
 sudo umount -f -l $OUT/img_mount && \
 rm -rf $OUT/img_mount
