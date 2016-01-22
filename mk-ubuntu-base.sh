@@ -1,9 +1,10 @@
 #!/bin/bash
 
-WALLE_ROOT="`pwd`/.."
-if [ "$1"x != ""x  ]; then
-         WALLE_ROOT=$1
+if [ "$WALLE_ROOT"x == ""x  ]; then
+         WALLE_ROOT="`pwd`/.."
 fi
+
+echo "WALLE_ROOT=$WALLE_ROOT"
 
 if [ ! -d $WALLE_ROOT/firmware ] && [ ! -d $WALLE_ROOT/kernel ]
 then
@@ -11,7 +12,6 @@ then
 	exit
 fi
 
-echo "WALLE_ROOT=$WALLE_ROOT"
 OUT=$WALLE_ROOT/output
 OUTPUT_IMG=$OUT/image/ubuntu-base.img
 MOUNT_DIR=$OUT/img_mount
@@ -22,10 +22,6 @@ echo "Building ubuntu-base"
 
 mkdir -p $MOUNT_DIR
 mkdir -p $OUT/image
-
-MOUNT_DIR=$OUT/img_mount
-UBUNTU_BASE_DIR=$WALLE_ROOT/firmware/ubuntu-base
-UBUNTU_ARCHIVES=$UBUNTU_BASE_DIR/ubuntu-trusty-armhf-base.tgz
 
 echo "make empty image"
 dd if=/dev/zero of=$OUTPUT_IMG bs=1M count=500
