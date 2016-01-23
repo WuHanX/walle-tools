@@ -27,7 +27,7 @@ if [ ! -f $SYSTEM_IMG ]; then
 	case $1 in
 	ubuntu-base.img) $WALLE_ROOT/tools/mk-ubuntu-base.sh;;
 	lubuntu-core.img) $WALLE_ROOT/tools/mk-lubuntu-core.sh;;
-	qt.img) echo "make QT image";;
+	qt-ubuntu-base.img) $WALLE_ROOT/tools/mk-qt-ubuntu-base.sh $WALLE_ROOT;;
 	*) echo "Unknown image: $1";;
 	esac
 fi
