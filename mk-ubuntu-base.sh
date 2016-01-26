@@ -40,9 +40,14 @@ sudo cp $UBUNTU_BASE_DIR/mtd-by-name.sh $MOUNT_DIR/usr/local/bin/
 sudo chmod 0755 $MOUNT_DIR/usr/local/bin/mtd-by-name.sh
 sudo cp $UBUNTU_BASE_DIR/first-boot-recovery.sh $MOUNT_DIR/usr/local/bin/
 sudo chmod 0755 $MOUNT_DIR/usr/local/bin/first-boot-recovery.sh
-# copy deb
-sudo cp $UBUNTU_BASE_DIR/deb/*.deb $MOUNT_DIR/var/cache/apt/archives/
+# for alsa
+sudo cp $UBUNTU_BASE_DIR/tinymix $MOUNT_DIR/usr/local/bin/
+sudo chmod 0755 $MOUNT_DIR/usr/local/bin/tinymix
+sudo cp $UBUNTU_BASE_DIR/alsa-rt5640-enable.sh $MOUNT_DIR/usr/local/bin/
+sudo chmod 0755 $MOUNT_DIR/usr/local/bin/alsa-rt5640-enable.sh
 
+# install ubuntu-base deb
+sudo cp $UBUNTU_BASE_DIR/deb/*.deb $MOUNT_DIR/var/cache/apt/archives/
 sudo cp $UBUNTU_BASE_DIR/ubuntu-base-helper.sh $MOUNT_DIR/tmp/
 sudo chmod 0755 $MOUNT_DIR/tmp/ubuntu-base-helper.sh
 sudo chroot $MOUNT_DIR /bin/bash -c "/tmp/ubuntu-base-helper.sh"
