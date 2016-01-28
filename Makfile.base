@@ -1,11 +1,10 @@
-#export WALLE_ROOT:=`pwd`
 export WALLE_ROOT:=$(shell pwd)
 
 $(warning WALLE_ROOT is: $(WALLE_ROOT))
 
-.PHONY: all ubuntu-base lubuntu-core qt demo no_system hardware kernel clean distclean
+.PHONY: all ubuntu-base lubuntu-core qt demo base hardware kernel clean distclean
 
-no_system: kernel demo
+base: kernel demo
 	@tools/copy_files.sh $(WALLE_ROOT)
 
 demo: hardware
@@ -33,7 +32,7 @@ lubuntu-core:
 qt:
 	@tools/mk_system.sh qt-ubuntu-base.img
 
-all: no_system ubuntu-base lubuntu-core
+all: base ubuntu-base lubuntu-core qt
 
 clean:
 	@echo "cleaning..."
@@ -41,4 +40,5 @@ clean:
 
 distclean: clean
 	@make -C hardware/rk_ffmpeg_linux distclean
+	@make -C demo/ffmpeg-example clean
 	@make -C kernel distclean
