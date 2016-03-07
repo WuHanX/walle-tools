@@ -1,9 +1,10 @@
 #!/bin/bash
 
-WALLE_ROOT="`pwd`/.."
-if [ "$1"x != ""x  ]; then
-         WALLE_ROOT=$1
+if [ "$WALLE_ROOT"x == ""x  ]; then
+         WALLE_ROOT="`pwd`/.."
 fi
+
+echo "WALLE_ROOT=$WALLE_ROOT"
 
 if [ ! -d $WALLE_ROOT/firmware ] && [ ! -d $WALLE_ROOT/kernel ]
 then
@@ -11,7 +12,6 @@ then
 	exit
 fi
 
-echo "WALLE_ROOT=$WALLE_ROOT"
 OUT=$WALLE_ROOT/output
 OUTPUT_IMG=$OUT/image/qt-ubuntu-base.img
 MOUNT_DIR=$OUT/img_mount
@@ -24,10 +24,6 @@ echo "Building qt-ubuntu-base"
 
 mkdir -p $MOUNT_DIR
 mkdir -p $OUT/image
-
-MOUNT_DIR=$OUT/img_mount
-UBUNTU_BASE_DIR=$WALLE_ROOT/firmware/ubuntu-base
-UBUNTU_ARCHIVES=$UBUNTU_BASE_DIR/ubuntu-trusty-armhf-base.tgz
 
 echo "make empty image"
 dd if=/dev/zero of=$OUTPUT_IMG bs=1M count=500
@@ -48,9 +44,14 @@ sudo cp $UBUNTU_BASE_DIR/mtd-by-name.sh $MOUNT_DIR/usr/local/bin/
 sudo chmod 0755 $MOUNT_DIR/usr/local/bin/mtd-by-name.sh
 sudo cp $UBUNTU_BASE_DIR/first-boot-recovery.sh $MOUNT_DIR/usr/local/bin/
 sudo chmod 0755 $MOUNT_DIR/usr/local/bin/first-boot-recovery.sh
-# copy deb
-sudo cp $UBUNTU_BASE_DIR/deb/*.deb $MOUNT_DIR/var/cache/apt/archives/
+# for alsa
+sudo cp $UBUNTU_BASE_DIR/tinymix $MOUNT_DIR/usr/local/bin/
+sudo chmod 0755 $MOUNT_DIR/usr/local/bin/tinymix
+sudo cp $UBUNTU_BASE_DIR/alsa-rt5640-enable.sh $MOUNT_DIR/usr/local/bin/
+sudo chmod 0755 $MOUNT_DIR/usr/local/bin/alsa-rt5640-enable.sh
 
+# install ubuntu-base deb
+sudo cp $UBUNTU_BASE_DIR/deb/*.deb $MOUNT_DIR/var/cache/apt/archives/
 sudo cp $UBUNTU_BASE_DIR/ubuntu-base-helper.sh $MOUNT_DIR/tmp/
 sudo chmod 0755 $MOUNT_DIR/tmp/ubuntu-base-helper.sh
 sudo chroot $MOUNT_DIR /bin/bash -c "/tmp/ubuntu-base-helper.sh"
