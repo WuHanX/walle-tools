@@ -31,9 +31,10 @@ cd $MOUNT_DIR
 sudo tar xvf $UBUNTU_ARCHIVES > /dev/null
 cd -
 
-# enable ttyS2 for debug console
-sudo cp $UBUNTU_BASE_DIR/ttyS2.conf $MOUNT_DIR/etc/init/
-sudo chmod 0644 $MOUNT_DIR/etc/init/ttyS2.conf
+# debug console
+sudo cp $UBUNTU_BASE_DIR/ttyFIQ0.conf $MOUNT_DIR/etc/init/
+sudo chmod 0644 $MOUNT_DIR/etc/init/ttyFIQ0.conf
+
 # detemine first boot and expand system partition.
 sudo touch $MOUNT_DIR/firstboot
 sudo cp $UBUNTU_BASE_DIR/mtd-by-name.sh $MOUNT_DIR/usr/local/bin/
