@@ -8,17 +8,27 @@ base: kernel demo
 	@tools/copy_files.sh $(WALLE_ROOT)
 
 demo: hardware
-	@make -C demo/ffmpeg-example
 	@mkdir -p output/rootfs/root/
-	@cp -rf demo/ffmpeg-example/ffmpegexample output/rootfs/root/
-	@cp -rf demo/glmark2 output/rootfs/
+	# VPU
+	@make -C demo/vpu_api_demo
+	@cp -rf demo/vpu_api_demo/testvpu output/rootfs/root/
+	@cp -rf demo/vpu_api_demo/h264_320x240_coding_7_for_dec.bin output/rootfs/root/
+	@cp -rf demo/vpu_api_demo/vpu_enc_input_yuv420sp_320x240.yuv output/rootfs/root/
+	# RGA
+	@make -C demo/rga_demo
+	@cp -rf demo/rga_demo/testrga output/rootfs/root/
+	@cp -rf demo/rga_demo/in_1920x1088_nv12.yuv output/rootfs/root/
+	# CIF Camera
+	@make -C demo/camera_demo
+	@cp -rf demo/camera_demo/testcamera output/rootfs/root/
 
 hardware:
-	# make ffmpeg
-	@cd hardware/rk_ffmpeg_linux && ./linux_generate.sh
+	@mkdir -p output/rootfs/usr/lib/
 	# make wifi
 	@make -C hardware/wifi
 	@cp -rf hardware/gpu/* output/rootfs/
+	@cp -rf hardware/libvpu/* output/rootfs/usr/lib/
+	@cp -rf hardware/touchscreen/* output/rootfs/
 
 kernel:
 	@tools/mk_kernel.sh $(WALLE_ROOT)
@@ -39,6 +49,5 @@ clean:
 	@rm -rf output
 
 distclean: clean
-	@make -C hardware/rk_ffmpeg_linux distclean
-	@make -C demo/ffmpeg-example clean
+	@make -C demo/vpu_api_demo clean
 	@make -C kernel distclean
