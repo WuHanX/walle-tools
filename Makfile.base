@@ -2,7 +2,7 @@ export WALLE_ROOT:=$(shell pwd)
 
 $(warning WALLE_ROOT is: $(WALLE_ROOT))
 
-.PHONY: all ubuntu-base lubuntu-core qt demo base hardware kernel clean distclean
+.PHONY: all ubuntu-base lubuntu-core demo base hardware kernel clean distclean
 
 base: kernel demo
 	@tools/copy_files.sh $(WALLE_ROOT)
@@ -39,10 +39,7 @@ ubuntu-base:
 lubuntu-core:
 	@tools/mk_system.sh lubuntu-core.img
 
-qt:
-	@tools/mk_system.sh qt-ubuntu-base.img
-
-all: base ubuntu-base lubuntu-core qt
+all: base ubuntu-base lubuntu-core
 
 clean:
 	@echo "cleaning..."
