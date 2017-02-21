@@ -27,7 +27,9 @@ hardware:
 	# make wifi
 	@make -C hardware/wifi
 	@cp -rf hardware/gpu/* output/rootfs/
-	@cp -rf hardware/libvpu/* output/rootfs/usr/lib/
+	@make -C hardware/libvpu
+	@cp -rf hardware/libvpu/libs/* output/rootfs/usr/lib/
+#	@cp -rf hardware/libvpu/* output/rootfs/usr/lib/
 	@cp -rf hardware/touchscreen/* output/rootfs/
 
 kernel:
